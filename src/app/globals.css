@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+/* Brand palette from the GenofIT site (src/styles/colors.css there). */
+@theme static {
+  --color-background: #13142d;
+  --color-surface: #1a1a3b;
+  --color-foreground: #f2f2f2;
+  --color-muted: #b7baff;
+  --color-primary: #b7baff;
+  --color-accent: #c6ff3d;
+  --color-ink: #252528;
+  --color-border: color-mix(in srgb, #6665fe 50%, transparent);
+  --color-danger: #ff8a8a;
+}
+@theme inline {
+  --font-sans: var(--font-arimo), Arial, sans-serif;
+}
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
