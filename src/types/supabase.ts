@@ -258,6 +258,7 @@ export type Database = {
       course_payment_attempts: {
         Row: {
           amount: number
+          checkout_expires_at: number | null
           created_at: string
           currency: string
           id: string
@@ -269,6 +270,7 @@ export type Database = {
         }
         Insert: {
           amount: number
+          checkout_expires_at?: number | null
           created_at?: string
           currency?: string
           id: string
@@ -280,6 +282,7 @@ export type Database = {
         }
         Update: {
           amount?: number
+          checkout_expires_at?: number | null
           created_at?: string
           currency?: string
           id?: string
@@ -1259,7 +1262,7 @@ export type Database = {
       }
       is_admin: { Args: never; Returns: boolean }
       is_valid_timezone: { Args: { tz: string }; Returns: boolean }
-      prepare_course_payment: {
+      prepare_course_payment_v2: {
         Args: {
           p_amount: number
           p_livemode?: boolean
@@ -1272,6 +1275,7 @@ export type Database = {
         }
         Returns: {
           amount: number
+          checkout_expires_at: number | null
           created_at: string
           currency: string
           id: string

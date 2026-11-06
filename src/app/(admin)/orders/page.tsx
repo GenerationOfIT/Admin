@@ -79,16 +79,8 @@ export default async function OrdersPage({
       referencedTable: "customers",
     });
   }
-  const [{ data: rows, count, error }, owing] = await Promise.all([
-    orders,
-    db
-      .from("orders")
-      .select("amount, amount_paid")
-      .eq("stripe_livemode", live)
-      .eq("status", "partially_paid"),
-  ]);
+  const { data: rows, count, error } = await orders;
   if (error) throw error;
-  if (owing.error) throw owing.error;
   const paidAttempts = rows.length
     ? await db
         .from("course_payment_attempts")
@@ -122,10 +114,6 @@ export default async function OrdersPage({
           },
         ]
       : []);
-  const outstanding = owing.data.reduce(
-    (sum, order) => sum + (order.amount - order.amount_paid),
-    0,
-  );
   const pages = Math.max(1, Math.ceil((count ?? 0) / PAGE_SIZE));
   const link = (change: Partial<SearchParams>) => {
     const next = new URLSearchParams();
@@ -148,7 +136,7 @@ export default async function OrdersPage({
   return (
     <PendingNavigation>
       <div className="max-w-6xl">
-        <div className="mb-2 flex items-center justify-between">
+        <div className="mb-6 flex items-center justify-between">
           <h1 className="text-2xl font-bold">Orders</h1>
           <nav aria-label="Environment" className="flex gap-1 text-sm">
             {[
@@ -171,13 +159,6 @@ export default async function OrdersPage({
             ))}
           </nav>
         </div>
-        <p className="text-muted mb-6 text-sm">
-          Read-only. {owing.data.length} order
-          {owing.data.length === 1 ? "" : "s"} owe money,{" "}
-          {formatMoney(outstanding)} outstanding. Refunds are made in Stripe and
-          don&apos;t update these orders yet.
-        </p>
-
         <div className="mb-4 flex flex-wrap items-center gap-2">
           {(Object.keys(statusFilters) as StatusFilter[]).map((value) => (
             <PendingLink

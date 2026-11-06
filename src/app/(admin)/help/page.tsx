@@ -48,7 +48,7 @@ export default function HelpPage() {
           items={[
             "Sign in with your email and password. Accounts are created by a developer; there is no sign-up.",
             "Changes reach the website a few seconds after you save. If a page on the site still looks old, reload it.",
-            "Things that change with the date alone, such as an event starting or enrollment and registration opening or closing, update on the site once a day around 03:00 UTC (07:00 in Tbilisi), or sooner when related content is saved. Until then a page can show an old status, but payments always check the dates live, so nobody can enroll after the closing date.",
+            "Things that change with the date alone, such as an event starting or enrollment and registration opening or closing, update on the site once a day around 03:00 UTC (07:00 in Tbilisi), or sooner when related content is saved. Until then a page can show an old status, but checkout always checks the dates live, so nobody can start enrolling after the closing date (see Changing the price under Courses for payment pages already open).",
             "Each form, and each course tab, has its own Save button at the bottom. It becomes active once you change something, and “Unsaved changes” shows next to it until you save.",
             "“Discard changes”, next to Save, puts the form back to how it was at the last save, after asking first. On “New …” pages, Cancel goes back to the list instead.",
             "Leaving a page with unsaved changes asks first: clicking a link in the admin asks “Leave this page and lose them?”, and closing the tab or reloading shows the browser’s own “Leave site?” warning. The browser’s Back button doesn’t ask, so save before using it.",
@@ -200,10 +200,39 @@ export default function HelpPage() {
               "The line at the top shows what that means today (enrolling, upcoming, paused, closed or not open).",
               "Course starts is optional; it shows on the course page and in confirmation emails.",
               "Tuition is the full price in dollars: more than $0, up to $100,000, at most two decimals (type 900 for $900). Paying it in full is always offered.",
-              "Orders already made keep the price they were bought at.",
+              "Orders with a payment keep the price they were bought at. Unpaid orders get the current price when the customer comes back.",
               "“Let students pay in parts”: students choose each amount and come back to pay the rest. Nothing is charged automatically.",
               "Minimum payment applies to each part and can’t be more than the tuition. A smaller final payment is always allowed.",
               "Pricing card: the title (required, up to 120 characters), description (up to 300) and up to 20 “included” items (up to 200 each) shown on the price card.",
+            ]}
+          />
+        </Sub>
+
+        <Sub title="Changing the price">
+          <p className="text-muted mb-3">
+            A Stripe payment page that’s already open keeps the price it was
+            opened with for about 30 minutes, even after you change the price
+            here. To make sure nobody pays the old price:
+          </p>
+          <ol className="text-muted mb-3 flex list-decimal flex-col gap-1.5 pl-5">
+            <li>
+              Untick “Enrollment switched on” and save. Don’t unpublish the
+              course.
+            </li>
+            <li>
+              Wait at least 35 minutes. Every payment page opened before that
+              has now expired.
+            </li>
+            <li>Change the tuition or minimum payment and save.</li>
+            <li>
+              Tick “Enrollment switched on” again and save. No need to wait this
+              time.
+            </li>
+          </ol>
+          <List
+            items={[
+              "While enrollment is off, students who already paid part can still pay the rest; their price doesn’t change.",
+              "The same applies to the closing date: a payment page opened just before closing can still be paid for about 30 minutes. If the deadline must be exact, switch enrollment off 35 minutes before it.",
             ]}
           />
         </Sub>
@@ -369,7 +398,6 @@ export default function HelpPage() {
             "Started is the date of the first payment, or when checkout was opened if nothing is paid yet. Payments lists the latest three payments with their amounts, newest first, and how many more there are; the order page has them all.",
             "Once anything is paid, the order keeps its price and minimum, even if the course’s price changes later.",
             "Closed orders only come from the earlier one-time checkout. Today nothing marks an order failed, canceled or refunded; a refund made in Stripe still shows as Paid here.",
-            "The line at the top shows how many orders owe money and the total outstanding.",
             "Paid shows what was paid out of the total; Balance is what’s still owed.",
             "Dates and times on order and email pages are in UTC and marked “UTC”. Tbilisi is 4 hours ahead, so 20:30 UTC is 00:30 the next day in Tbilisi.",
             "Refunds are made in Stripe and don’t update orders here yet.",
